@@ -25,7 +25,7 @@ interface Subtotal extends VisualizationDefinition {
 
 const vis: Subtotal = {
   id: 'subtotal',
-  label: 'Subtotal',
+  label: 'Subtotal Gisler Test',
 
   options: {
     theme: {

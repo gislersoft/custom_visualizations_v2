@@ -31,7 +31,8 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
       console.log('colKey', colKey)
       console.log('record', record)
       if (rowKey.length > 1) {
-        this.count++
+        console.log(record['fct_company_brand.rx_total_patient_cnt_sum'])
+        this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
       }
     },
     value: function() {

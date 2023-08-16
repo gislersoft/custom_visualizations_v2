@@ -23,6 +23,7 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
+/*
 const myAggregator = (data: any, rowKey: any, colKey: any) => {
   return {
     count: '',
@@ -50,6 +51,30 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
   }
 }
 
+const byPassAggregator = (data: any, rowKey: any, colKey: any, agg: any) => {
+  return {
+    count: '',
+    push: function(record: any) {
+      if (rowKey.length > 1) {
+        agg.push(record)
+      }
+    },
+    value: function() {
+      if (rowKey.length > 1) {
+        return this.count
+      }
+      return agg.value()
+    },
+    format: function(x: any) {
+      if (rowKey.length > 1) {
+        return agg.format(x)
+      }
+      return x
+    }
+  }
+}
+*/
+
 const vis: Subtotal = {
   id: 'subtotal',
   label: 'Subtotal Gisler Test',
@@ -70,9 +95,9 @@ const vis: Subtotal = {
       label: 'Show Full Field Name',
       default: true
     },
-    disable_all_aggregators: {
+    disable_top_level_aggregators: {
       type: 'boolean',
-      label: 'Disable All Aggregators',
+      label: 'Disable Top Level Aggregators',
       default: false
     }
   },
@@ -128,6 +153,42 @@ const vis: Subtotal = {
 
     const htmlForCell = (cell: Cell) => {
       return cell.html ? LookerCharts.Utils.htmlForCell(cell) : cell.value
+    }
+
+    const checkAggregatorsConfig = (agg: any): any => {
+      if (config.disable_top_level_aggregators) {
+        const originalPushAgg = agg.push
+        const originalFormat = agg.format
+        const originalValue = agg.value
+        const originalCount = agg.count
+
+        const newAggregator = (data: any, rowKey: any, colKey: any) => {
+          return {
+            count: '',
+            push: function(record: any) {
+              if (rowKey.length > 1) {
+                originalPushAgg(record)
+              }
+            },
+            value: function() {
+              if (rowKey.length > 1) {
+                return originalCount
+              }
+              return originalValue()
+            },
+            format: function(x: any) {
+              if (rowKey.length > 1) {
+                return originalFormat(x)
+              }
+              return x
+            }
+          }
+        }
+
+        return newAggregator
+
+      }
+      return agg
     }
 
     const ptData = []
@@ -220,11 +281,14 @@ const vis: Subtotal = {
       const aggName = `measure_${i}`
       labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
       aggregatorNames.push(aggName)
-      if (i === 1) {
+      aggregators.push(checkAggregatorsConfig(agg([name])))
+      /*
+      if (config.disable_top_level_aggregators) {
         aggregators.push(myAggregator)
       } else {
         aggregators.push(agg([name]))
       }
+      */
     }
 
     const numericSortAsc = (a: any, b: any) => a - b
@@ -259,36 +323,21 @@ const vis: Subtotal = {
       arrowCollapsed: '▶'
     }
 
-    if (!config.disable_all_aggregators) {
-      const options = {
-        rows: dimensions,
-        cols: pivots,
-        labels,
-        dataClass,
-        renderer,
-        rendererOptions,
-        aggregatorNames,
-        aggregators,
-        sorters,
-        hasColTotals: queryResponse.has_totals,
-        hasRowTotals: queryResponse.has_row_totals
-      }
-      $(element).pivot(ptData, options)
-    } else {
-      const options = {
-        rows: dimensions,
-        cols: pivots,
-        labels,
-        dataClass,
-        renderer,
-        rendererOptions,
-        aggregatorNames,
-        sorters,
-        hasColTotals: queryResponse.has_totals,
-        hasRowTotals: queryResponse.has_row_totals
-      }
-      $(element).pivot(ptData, options)
+    const options = {
+      rows: dimensions,
+      cols: pivots,
+      labels,
+      dataClass,
+      renderer,
+      rendererOptions,
+      aggregatorNames,
+      aggregators,
+      sorters,
+      hasColTotals: queryResponse.has_totals,
+      hasRowTotals: queryResponse.has_row_totals
     }
+    $(element).pivot(ptData, options)
+
   }
 }
 

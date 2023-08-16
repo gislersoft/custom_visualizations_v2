@@ -23,11 +23,11 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
-/*
 const myAggregator = (data: any, rowKey: any, colKey: any) => {
   return {
     count: '',
     push: function(record: any) {
+      console.log('data',data)
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)
       console.log('record', record)
@@ -51,6 +51,7 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
   }
 }
 
+/*
 const byPassAggregator = (data: any, rowKey: any, colKey: any, agg: any) => {
   return {
     count: '',
@@ -155,6 +156,8 @@ const vis: Subtotal = {
     const checkAggregatorsConfig = function(agg: any) {
       if (config.disable_top_level_aggregators) {
         console.log('enabled')
+
+        /*
         const newAgg = { ...agg }
         newAgg.originalPush = { ...agg.push }
         newAgg.originalFormat = { ...agg.format }
@@ -175,6 +178,8 @@ const vis: Subtotal = {
           }
           return x
         }
+
+        */
 
         /*
         type aggregatorParams = Parameters<typeof agg>;
@@ -212,7 +217,7 @@ const vis: Subtotal = {
         }
         */
 
-        return newAgg
+        return myAggregator
 
       } else {
         return agg

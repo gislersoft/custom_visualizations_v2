@@ -132,10 +132,7 @@ const vis: Subtotal = {
 
     const pivots: string[] = queryResponse.fields.pivots.map((d: any) => d.name)
     const dimensions: string[] = queryResponse.fields.dimensions.map((d: any) => d.name)
-    console.log(dimensions)
-    console.log(pivots)
     const measures = queryResponse.fields.measures
-    console.log(measures)
 
     const labels: { [key: string]: any } = {}
     for (const key of Object.keys(config.query_fields)) {
@@ -167,6 +164,14 @@ const vis: Subtotal = {
           if (this['rowKey'].length > 1) {
             this.originalPush(record)
           }
+        }
+
+        agg.format = function(x: any) {
+          console.log('rowKey', this['rowKey'])
+          if (this['rowKey'].length > 1) {
+            return 'Top Level'
+          }
+          return x
         }
 
         /*
@@ -227,7 +232,6 @@ const vis: Subtotal = {
       } else {
         // Fan out each row using the pivot. Multiple pivots are joined by `|FIELD|`.
         for (const flatKey of Object.keys(row[measures[0].name])) {
-          console.info(flatKey)
           const pivotRow = Object.assign({}, ptRow)
           if (flatKey === LOOKER_ROW_TOTAL_KEY) {
             console.error(flatKey)
@@ -268,9 +272,6 @@ const vis: Subtotal = {
     const aggregators = []
 
     for (let i = 0; i < measures.length; i++) {
-      if (i === 1) {
-        console.log(measures[i])
-      }
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

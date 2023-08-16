@@ -31,18 +31,10 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)
       console.log('record', record)
-      if (rowKey.length === 0) {
-        if (colKey.length === 0) {
-          this.count = 1
-        } else {
-          this.count = 2
-        }
+      if (this.data.hasColTotals) {
+        this.count = 1
       } else {
-        if (colKey.length === 0) {
-          this.count = 3
-        } else {
-          this.count = 4
-        }
+        this.count = 0
       }
       /*if (rowKey.length > 1) {
         console.log('Value:', this.value())
@@ -376,7 +368,8 @@ const vis: Subtotal = {
       aggregators,
       sorters,
       hasColTotals: queryResponse.has_totals,
-      hasRowTotals: queryResponse.has_row_totals
+      hasRowTotals: queryResponse.has_row_totals,
+      hideTotals: true
     }
     $(element).pivot(ptData, options)
 

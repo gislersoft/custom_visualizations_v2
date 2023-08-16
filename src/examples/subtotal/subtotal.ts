@@ -29,8 +29,10 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
     push: function(record: any) {
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)
-      console.log('data', data)
-      this.count++
+      console.log('record', record)
+      if (rowKey.length > 1) {
+        this.count++
+      }
     },
     value: function() {
       return this.count

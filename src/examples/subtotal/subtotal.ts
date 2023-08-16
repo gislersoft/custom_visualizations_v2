@@ -31,7 +31,17 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)
       console.log('record', record)
-      this.count = record[3]
+
+      if (data && data.sorters) {
+        const keys = Object.keys(data.sorters)
+        console.log(keys[0])
+        if (record && record[keys[0]]) {
+          console.log('valor', record[keys[0]])
+          this.count = record[keys[0]]
+        }
+      } else {
+        this.count = 1
+      }
       /*if (rowKey.length > 1) {
         console.log('Value:', this.value())
         // this.count = record['fct_company_brand.rx_total_patient_cnt_sum']

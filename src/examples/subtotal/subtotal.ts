@@ -27,6 +27,9 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
   return {
     count: 0,
     push: function(record: any) {
+      console.log('rowKey', rowKey)
+      console.log('colKey', colKey)
+      console.log('data', data)
       this.count++
     },
     value: function() {

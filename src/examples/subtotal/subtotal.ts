@@ -23,7 +23,9 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
-const myAggregator = (data: any, rowKey: any, colKey: any): any => {
+const myAggregators: any[] = []
+
+myAggregators[0] = (data: any, rowKey: any, colKey: any): any => {
   return {
     count: '',
     push: function(record: any) {
@@ -32,21 +34,65 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
       console.log('colKey', colKey)
       console.log('record', record)
 
-      if (data && data.sorters) {
-        const keys = Object.keys(data.sorters)
-        console.log(keys[0])
-        if (record && record[keys[0]]) {
-          console.log('valor', record[keys[0]])
-          this.count = record[keys[0]]
-        }
-      } else {
-        this.count = 1
+      if (rowKey.length > 1) {
+        this.count = record['fct_company_brand.rx_total_script_cnt_sum']
       }
-      /*if (rowKey.length > 1) {
-        console.log('Value:', this.value())
-        // this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
-        this.count = this.value()
-      }*/
+    },
+    value: function() {
+      return this.count
+    },
+    format: function(x: any) {
+      if (x !== '') {
+        const intFormat = formatType('###,###,###,##0')
+        if (intFormat) {
+          return intFormat(x)
+        }
+      }
+      return x
+    }
+  }
+}
+
+myAggregators[1] = (data: any, rowKey: any, colKey: any): any => {
+  return {
+    count: '',
+    push: function(record: any) {
+      console.log('data',data)
+      console.log('rowKey', rowKey)
+      console.log('colKey', colKey)
+      console.log('record', record)
+
+      if (rowKey.length > 1) {
+        this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
+      }
+    },
+    value: function() {
+      return this.count
+    },
+    format: function(x: any) {
+      if (x !== '') {
+        const intFormat = formatType('###,###,###,##0')
+        if (intFormat) {
+          return intFormat(x)
+        }
+      }
+      return x
+    }
+  }
+}
+
+myAggregators[3] = (data: any, rowKey: any, colKey: any): any => {
+  return {
+    count: '',
+    push: function(record: any) {
+      console.log('data',data)
+      console.log('rowKey', rowKey)
+      console.log('colKey', colKey)
+      console.log('record', record)
+
+      if (rowKey.length > 1) {
+        this.count = record['fct_company_brand.rx_total_script_cnt_sum']
+      }
     },
     value: function() {
       return this.count
@@ -165,11 +211,10 @@ const vis: Subtotal = {
       return cell.html ? LookerCharts.Utils.htmlForCell(cell) : cell.value
     }
 
-    const checkAggregatorsConfig = function(agg: any) {
+    /*
+    const checkAggregatorsConfig = function(measure:any, agg: any) {
       if (config.disable_top_level_aggregators) {
         console.log('Injecting aggregator 2', agg)
-
-        /*
         const newAgg = { ...agg }
         newAgg.originalPush = { ...agg.push }
         newAgg.originalFormat = { ...agg.format }
@@ -227,7 +272,6 @@ const vis: Subtotal = {
             }
           }
         }
-        */
 
         return myAggregator
 
@@ -235,6 +279,7 @@ const vis: Subtotal = {
         return agg
       }
     }
+    */
 
     const ptData = []
     for (const row of data) {
@@ -321,14 +366,11 @@ const vis: Subtotal = {
       const aggName = `measure_${i}`
       labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
       aggregatorNames.push(aggName)
-      aggregators.push(checkAggregatorsConfig(agg([name])))
-      /*
       if (config.disable_top_level_aggregators) {
-        aggregators.push(myAggregator)
+        aggregators.push(myAggregators[i])
       } else {
         aggregators.push(agg([name]))
       }
-      */
     }
 
     const numericSortAsc = (a: any, b: any) => a - b

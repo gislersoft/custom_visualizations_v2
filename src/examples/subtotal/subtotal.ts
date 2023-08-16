@@ -157,35 +157,55 @@ const vis: Subtotal = {
 
     const checkAggregatorsConfig = (agg: any): any => {
       if (config.disable_top_level_aggregators) {
-        const originalPushAgg = agg.push
-        const originalFormat = agg.format
-        const originalValue = agg.value
-        const originalCount = agg.count
+        agg.originalPush = { ...agg.push }
+        agg.originalFormat = { ...agg.format }
+        agg.originalValue = { ...agg.value }
+        agg.originalCount = { ...agg.count }
 
+        agg.push = function(record: any) {
+          console.log('rowKey', this['rowKey'])
+          if (this['rowKey'].length > 1) {
+            this.originalPush(record)
+          }
+        }
+
+        /*
+        type aggregatorParams = Parameters<typeof agg>;
+        agg.format = function(x: any) {
+          console.info(this['rowKey'])
+          if (this['rowKey'].length > 1) {
+            return originalFormat(x)
+          }
+          return x
+        }
+        */
+
+        /*
         const newAggregator = (data: any, rowKey: any, colKey: any) => {
           return {
             count: '',
             push: function(record: any) {
               if (rowKey.length > 1) {
-                originalPushAgg(record)
+                this.originalPushAgg(record)
               }
             },
             value: function() {
               if (rowKey.length > 1) {
                 return originalCount
               }
-              return originalValue()
+              return this.originalValue()
             },
             format: function(x: any) {
               if (rowKey.length > 1) {
-                return originalFormat(x)
+                return this.originalFormat(x)
               }
               return x
             }
           }
         }
+        */
 
-        return newAggregator
+        return agg
 
       }
       return agg

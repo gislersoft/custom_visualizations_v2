@@ -25,7 +25,7 @@ interface Subtotal extends VisualizationDefinition {
 
 const myAggregator = (data: any, rowKey: any, colKey: any) => {
   return {
-    count: 0,
+    count: '',
     push: function(record: any) {
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)

@@ -15,6 +15,8 @@ declare var LookerCharts: LookerChartUtils
 type Formatter = ((s: any) => string)
 const defaultFormatter: Formatter = (x) => x.toString()
 
+const simpleFormatter: Formatter = (x) => ''
+
 const LOOKER_ROW_TOTAL_KEY = '$$$_row_total_$$$'
 
 subtotalMultipleAggregates($)
@@ -160,7 +162,7 @@ const vis: Subtotal = {
       switch (type) {
         case 'count': agg = tpl.sum(intFormat); break
         case 'count_distinct': agg = tpl.sum(intFormat); break
-        case 'sum': agg = (i === 1) ? () => 0 : tpl.sum(customFormat); break
+        case 'sum': agg = (i === 1) ? tpl.sum(simpleFormatter) : tpl.sum(customFormat); break
         case 'sum_distinct': agg = tpl.sum(customFormat); break
         case 'average': agg = tpl.average(customFormat); break
         case 'median': agg = tpl.median(customFormat); break

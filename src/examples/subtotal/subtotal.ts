@@ -156,6 +156,9 @@ const vis: Subtotal = {
         console.log('type',type)
         console.log('name',name)
         console.log('value_format',value_format)
+        console.log('label1',label1)
+        console.log('label2',label2)
+        continue
       }
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

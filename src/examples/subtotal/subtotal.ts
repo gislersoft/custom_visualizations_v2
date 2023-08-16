@@ -336,6 +336,7 @@ const vis: Subtotal = {
     const aggregators = []
 
     for (let i = 0; i < measures.length; i++) {
+      console.log('measures', measures)
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

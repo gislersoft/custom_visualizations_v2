@@ -23,65 +23,7 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
-const myAggregators: any[] = []
-
-myAggregators[0] = (data: any, rowKey: any, colKey: any): any => {
-  return {
-    count: '',
-    push: function(record: any) {
-      console.log('data',data)
-      console.log('rowKey', rowKey)
-      console.log('colKey', colKey)
-      console.log('record', record)
-
-      if (rowKey.length > 1) {
-        this.count = record['fct_company_brand.rx_total_script_cnt_sum']
-      }
-    },
-    value: function() {
-      return this.count
-    },
-    format: function(x: any) {
-      if (x !== '') {
-        const intFormat = formatType('###,###,###,##0')
-        if (intFormat) {
-          return intFormat(x)
-        }
-      }
-      return x
-    }
-  }
-}
-
-myAggregators[1] = (data: any, rowKey: any, colKey: any): any => {
-  return {
-    count: '',
-    push: function(record: any) {
-      console.log('data',data)
-      console.log('rowKey', rowKey)
-      console.log('colKey', colKey)
-      console.log('record', record)
-
-      if (rowKey.length > 1) {
-        this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
-      }
-    },
-    value: function() {
-      return this.count
-    },
-    format: function(x: any) {
-      if (x !== '') {
-        const intFormat = formatType('###,###,###,##0')
-        if (intFormat) {
-          return intFormat(x)
-        }
-      }
-      return x
-    }
-  }
-}
-
-myAggregators[3] = (data: any, rowKey: any, colKey: any): any => {
+const myAggregator = (data: any, rowKey: any, colKey: any): any => {
   return {
     count: '',
     push: function(record: any) {
@@ -368,7 +310,7 @@ const vis: Subtotal = {
       labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
       aggregatorNames.push(aggName)
       if (config.disable_top_level_aggregators) {
-        aggregators.push(myAggregators[i])
+        aggregators.push(myAggregator)
       } else {
         aggregators.push(agg([name]))
       }

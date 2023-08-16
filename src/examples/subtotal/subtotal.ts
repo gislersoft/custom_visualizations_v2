@@ -158,9 +158,10 @@ const vis: Subtotal = {
 
     const checkAggregatorsConfig = function(agg: any) {
       if (config.disable_top_level_aggregators) {
-        console.log('Injecting aggregator 2')
-        agg.count = ''
-        agg.push = function(record: any) {
+        console.log('Injecting aggregator 2', agg)
+        const newAggregator = { ...agg }
+        newAggregator.count = ''
+        newAggregator.push = function(record: any) {
           console.log('data',data)
           console.log('rowKey', this['rowKey'])
           console.log('colKey', this['colKey'])
@@ -231,7 +232,7 @@ const vis: Subtotal = {
         }
         */
 
-        return agg
+        return newAggregator
 
       } else {
         return agg

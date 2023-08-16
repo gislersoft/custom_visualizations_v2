@@ -15,8 +15,6 @@ declare var LookerCharts: LookerChartUtils
 type Formatter = ((s: any) => string)
 const defaultFormatter: Formatter = (x) => x.toString()
 
-const simpleFormatter: Formatter = (x) => ''
-
 const LOOKER_ROW_TOTAL_KEY = '$$$_row_total_$$$'
 
 subtotalMultipleAggregates($)
@@ -77,7 +75,10 @@ const vis: Subtotal = {
 
     const pivots: string[] = queryResponse.fields.pivots.map((d: any) => d.name)
     const dimensions: string[] = queryResponse.fields.dimensions.map((d: any) => d.name)
+    console.log(dimensions)
+    console.log(pivots)
     const measures = queryResponse.fields.measures
+    console.log(measures)
 
     const labels: { [key: string]: any } = {}
     for (const key of Object.keys(config.query_fields)) {
@@ -162,7 +163,7 @@ const vis: Subtotal = {
       switch (type) {
         case 'count': agg = tpl.sum(intFormat); break
         case 'count_distinct': agg = tpl.sum(intFormat); break
-        case 'sum': agg = (i === 1) ? tpl.sum(simpleFormatter) : tpl.sum(customFormat); break
+        case 'sum': agg = tpl.sum(customFormat); break
         case 'sum_distinct': agg = tpl.sum(customFormat); break
         case 'average': agg = tpl.average(customFormat); break
         case 'median': agg = tpl.median(customFormat); break
@@ -224,6 +225,7 @@ const vis: Subtotal = {
     const options = {
       rows: dimensions,
       cols: pivots,
+      hiddenFromAggregators: dimensions[0],
       labels,
       dataClass,
       renderer,

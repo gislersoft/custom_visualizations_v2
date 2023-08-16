@@ -97,11 +97,7 @@ const vis: Subtotal = {
 
     const ptData = []
     for (const row of data) {
-      debugger
       console.log(row)
-      if (row && row.dim_company && row.dim_company.short_desc === 'ACI Healthcare Usa, Inc.') {
-        console.info(row)
-      }
       const ptRow: { [key: string]: any } = {}
       for (const key of Object.keys(row)) {
         const cell = row[key] as Cell
@@ -155,13 +151,16 @@ const vis: Subtotal = {
     const aggregatorNames = []
     const aggregators = []
     for (let i = 0; i < measures.length; i++) {
+      if (i === 1) {
+        console.log(measures[i])
+      }
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
       const customFormat = formatType(value_format) || defaultFormatter
       let agg
       switch (type) {
         case 'count': agg = tpl.sum(intFormat); break
         case 'count_distinct': agg = tpl.sum(intFormat); break
-        case 'sum': agg = tpl.sum(customFormat); break
+        case 'sum': agg = (i === 1) ? 0 : tpl.sum(customFormat); break
         case 'sum_distinct': agg = tpl.sum(customFormat); break
         case 'average': agg = tpl.average(customFormat); break
         case 'median': agg = tpl.median(customFormat); break

@@ -152,21 +152,23 @@ const vis: Subtotal = {
       return cell.html ? LookerCharts.Utils.htmlForCell(cell) : cell.value
     }
 
-    const checkAggregatorsConfig = (agg: any): any => {
+    const checkAggregatorsConfig = function(agg: any) {
       if (config.disable_top_level_aggregators) {
-        agg.originalPush = { ...agg.push }
-        agg.originalFormat = { ...agg.format }
-        agg.originalValue = { ...agg.value }
-        agg.originalCount = { ...agg.count }
+        console.log('enabled')
+        const newAgg = { ...agg }
+        newAgg.originalPush = { ...agg.push }
+        newAgg.originalFormat = { ...agg.format }
+        newAgg.originalValue = { ...agg.value }
+        newAgg.originalCount = { ...agg.count }
 
-        agg.push = function(record: any) {
+        newAgg.push = function(record: any) {
           console.log('rowKey', this['rowKey'])
           if (this['rowKey'].length > 1) {
             this.originalPush(record)
           }
         }
 
-        agg.format = function(x: any) {
+        newAgg.format = function(x: any) {
           console.log('rowKey', this['rowKey'])
           if (this['rowKey'].length > 1) {
             return 'Top Level'
@@ -210,15 +212,15 @@ const vis: Subtotal = {
         }
         */
 
-        return agg
+        return newAgg
 
+      } else {
+        return agg
       }
-      return agg
     }
 
     const ptData = []
     for (const row of data) {
-      console.log(row)
       const ptRow: { [key: string]: any } = {}
       for (const key of Object.keys(row)) {
         const cell = row[key] as Cell

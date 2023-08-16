@@ -97,13 +97,13 @@ const vis: Subtotal = {
 
     const ptData = []
     for (const row of data) {
-      console.info(row);
+      console.info(row)
       const ptRow: { [key: string]: any } = {}
       for (const key of Object.keys(row)) {
-        const cell = row[key] as Cell
+        // const cell = row[key] as Cell
         if (pivotSet[key]) continue
-        const cellValue = htmlForCell(cell)
-        ptRow[key] = cellValue
+        // const cellValue = htmlForCell(cell)
+        ptRow[key] = '-'
       }
       if (pivots.length === 0) {
         // No pivoting, just add each data row.
@@ -149,10 +149,10 @@ const vis: Subtotal = {
     const aggregators = []
     for (let i = 0; i < measures.length; i++) {
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
-      if (i == 0) {
-        console.log("type",type);
-        console.log("name",name);
-        console.log("value_format",value_format);
+      if (i === 0) {
+        console.log('type',type)
+        console.log('name',name)
+        console.log('value_format',value_format)
       }
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

@@ -160,7 +160,7 @@ const vis: Subtotal = {
       switch (type) {
         case 'count': agg = tpl.sum(intFormat); break
         case 'count_distinct': agg = tpl.sum(intFormat); break
-        case 'sum': agg = (i === 1) ? 0 : tpl.sum(customFormat); break
+        case 'sum': agg = (i === 1) ? () => 0 : tpl.sum(customFormat); break
         case 'sum_distinct': agg = tpl.sum(customFormat); break
         case 'average': agg = tpl.average(customFormat); break
         case 'median': agg = tpl.median(customFormat); break

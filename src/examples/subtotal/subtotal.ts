@@ -23,7 +23,6 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
-/*
 const myAggregator = (data: any, rowKey: any, colKey: any): any => {
   return {
     count: '',
@@ -32,11 +31,20 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)
       console.log('record', record)
-      if (rowKey.length > 1) {
+      if (rowKey.length === 0) {
+        if (colKey.length === 0) {
+          this.count = 1
+        } else {
+          this.count = 2
+        }
+      } else {
+        this.count = 3
+      }
+      /*if (rowKey.length > 1) {
         console.log('Value:', this.value())
         // this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
         this.count = this.value()
-      }
+      }*/
     },
     value: function() {
       return this.count
@@ -52,7 +60,6 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
     }
   }
 }
-*/
 
 /*
 const byPassAggregator = (data: any, rowKey: any, colKey: any, agg: any) => {
@@ -159,19 +166,7 @@ const vis: Subtotal = {
     const checkAggregatorsConfig = function(agg: any) {
       if (config.disable_top_level_aggregators) {
         console.log('Injecting aggregator 2', agg)
-        const newAggregator = { ...agg }
-        newAggregator.count = ''
-        newAggregator.push = function(record: any) {
-          console.log('data',data)
-          console.log('rowKey', this['rowKey'])
-          console.log('colKey', this['colKey'])
-          console.log('record', record)
-          if (this['rowKey'].length > 1) {
-            console.log('Value:', this.value())
-            // this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
-            this.count = this.value()
-          }
-        }
+
         /*
         const newAgg = { ...agg }
         newAgg.originalPush = { ...agg.push }
@@ -232,7 +227,7 @@ const vis: Subtotal = {
         }
         */
 
-        return newAggregator
+        return myAggregator
 
       } else {
         return agg

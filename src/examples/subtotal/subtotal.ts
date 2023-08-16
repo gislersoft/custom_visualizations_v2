@@ -38,7 +38,11 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
           this.count = 2
         }
       } else {
-        this.count = 3
+        if (colKey.length === 0) {
+          this.count = 3
+        } else {
+          this.count = 4
+        }
       }
       /*if (rowKey.length > 1) {
         console.log('Value:', this.value())

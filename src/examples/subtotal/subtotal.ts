@@ -282,6 +282,7 @@ const vis: Subtotal = {
         dataClass,
         renderer,
         rendererOptions,
+        aggregatorNames,
         sorters,
         hasColTotals: queryResponse.has_totals,
         hasRowTotals: queryResponse.has_row_totals

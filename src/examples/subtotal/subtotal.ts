@@ -23,7 +23,8 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
-const myAggregator = (data: any, rowKey: any, colKey: any) => {
+/*
+const myAggregator = (data: any, rowKey: any, colKey: any): any => {
   return {
     count: '',
     push: function(record: any) {
@@ -32,8 +33,9 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
       console.log('colKey', colKey)
       console.log('record', record)
       if (rowKey.length > 1) {
-        console.log(record['fct_company_brand.rx_total_patient_cnt_sum'])
-        this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
+        console.log('Value:', this.value())
+        // this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
+        this.count = this.value()
       }
     },
     value: function() {
@@ -50,6 +52,7 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
     }
   }
 }
+*/
 
 /*
 const byPassAggregator = (data: any, rowKey: any, colKey: any, agg: any) => {
@@ -155,8 +158,19 @@ const vis: Subtotal = {
 
     const checkAggregatorsConfig = function(agg: any) {
       if (config.disable_top_level_aggregators) {
-        console.log('enabled')
-
+        console.log('Injecting aggregator 2')
+        agg.count = ''
+        agg.push = function(record: any) {
+          console.log('data',data)
+          console.log('rowKey', this['rowKey'])
+          console.log('colKey', this['colKey'])
+          console.log('record', record)
+          if (this['rowKey'].length > 1) {
+            console.log('Value:', this.value())
+            // this.count = record['fct_company_brand.rx_total_patient_cnt_sum']
+            this.count = this.value()
+          }
+        }
         /*
         const newAgg = { ...agg }
         newAgg.originalPush = { ...agg.push }
@@ -217,7 +231,7 @@ const vis: Subtotal = {
         }
         */
 
-        return myAggregator
+        return agg
 
       } else {
         return agg

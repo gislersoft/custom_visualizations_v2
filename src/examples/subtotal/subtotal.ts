@@ -150,9 +150,9 @@ const vis: Subtotal = {
     for (let i = 0; i < measures.length; i++) {
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
       if (i === 0) {
-        console.log('type',type)
-        console.log('name',name)
-        console.log('value_format',value_format)
+        console.warn('type',type)
+        console.warn('name',name)
+        console.warn('value_format',value_format)
       }
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

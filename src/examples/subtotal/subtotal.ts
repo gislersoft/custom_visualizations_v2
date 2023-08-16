@@ -27,13 +27,31 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
   return {
     count: '',
     push: function(record: any) {
-      console.log('data',data)
+      console.log('data', data)
       console.log('rowKey', rowKey)
       console.log('colKey', colKey)
       console.log('record', record)
 
       if (rowKey.length > 1) {
-        this.count = record['fct_company_brand.rx_total_script_cnt_sum']
+        if (data && data.aggregatorName && data.labels) {
+          let measureField = ''
+          const measure = data.aggregatorName
+          const labelToSearch = data.labels[measure]
+          const keys = Object.keys(data.labels)
+          for (let i = 0; i < keys.length; i++) {
+            if (data.labels[keys[i]]
+              && data.labels[keys[i]].label
+              && data.labels[keys[i]].label === labelToSearch) {
+              measureField = keys[i]
+              break
+            }
+          }
+          console.log('measureField', measureField)
+          if (measureField) {
+            this.count = record[measureField]
+          }
+        }
+
       }
     },
     value: function() {

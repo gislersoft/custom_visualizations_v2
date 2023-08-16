@@ -97,6 +97,7 @@ const vis: Subtotal = {
 
     const ptData = []
     for (const row of data) {
+      console.info(row);
       const ptRow: { [key: string]: any } = {}
       for (const key of Object.keys(row)) {
         const cell = row[key] as Cell
@@ -152,7 +153,7 @@ const vis: Subtotal = {
         console.log("type",type);
         console.log("name",name);
         console.log("value_format",value_format);
-      } 
+      }
       const customFormat = formatType(value_format) || defaultFormatter
       let agg
       switch (type) {

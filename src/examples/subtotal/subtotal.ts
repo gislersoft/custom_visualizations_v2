@@ -97,6 +97,8 @@ const vis: Subtotal = {
 
     const ptData = []
     for (const row of data) {
+      debugger
+      console.log(row)
       if (row && row.dim_company && row.dim_company.short_desc === 'ACI Healthcare Usa, Inc.') {
         console.info(row)
       }

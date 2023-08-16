@@ -100,10 +100,10 @@ const vis: Subtotal = {
       console.info(row)
       const ptRow: { [key: string]: any } = {}
       for (const key of Object.keys(row)) {
-        // const cell = row[key] as Cell
+        const cell = row[key] as Cell
         if (pivotSet[key]) continue
-        // const cellValue = htmlForCell(cell)
-        ptRow[key] = '-'
+        const cellValue = htmlForCell(cell)
+        ptRow[key] = cellValue
       }
       if (pivots.length === 0) {
         // No pivoting, just add each data row.
@@ -111,8 +111,10 @@ const vis: Subtotal = {
       } else {
         // Fan out each row using the pivot. Multiple pivots are joined by `|FIELD|`.
         for (const flatKey of Object.keys(row[measures[0].name])) {
+          console.info(flatKey)
           const pivotRow = Object.assign({}, ptRow)
           if (flatKey === LOOKER_ROW_TOTAL_KEY) {
+            console.error(flatKey)
             for (const pivotKey of Object.keys(row[measures[0].name])) {
               for (const pivot of pivots) {
                 pivotRow[pivot] = LOOKER_ROW_TOTAL_KEY
@@ -124,6 +126,7 @@ const vis: Subtotal = {
               }
             }
           } else {
+            console.error(flatKey)
             const pivotValues = flatKey.split(/\|FIELD\|/g)
             for (let i = 0; i < pivots.length; i++) {
               pivotRow[pivots[i]] = pivotValues[i]
@@ -150,9 +153,9 @@ const vis: Subtotal = {
     for (let i = 0; i < measures.length; i++) {
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
       if (i === 0) {
-        console.warn('type',type)
-        console.warn('name',name)
-        console.warn('value_format',value_format)
+        console.log('type',type)
+        console.log('name',name)
+        console.log('value_format',value_format)
       }
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

@@ -39,6 +39,10 @@ const myAggregator = (data: any, rowKey: any, colKey: any) => {
       return this.count
     },
     format: function(x: any) {
+      const intFormat = formatType('###,###,###,##0')
+      if (intFormat) {
+        return intFormat(x)
+      }
       return x
     }
   }

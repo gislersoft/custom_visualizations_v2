@@ -69,6 +69,11 @@ const vis: Subtotal = {
       type: 'boolean',
       label: 'Show Full Field Name',
       default: true
+    },
+    disable_all_aggregators: {
+      type: 'boolean',
+      label: 'Disable All Aggregators',
+      default: false
     }
   },
 
@@ -180,44 +185,47 @@ const vis: Subtotal = {
 
     const aggregatorNames = []
     const aggregators = []
-    for (let i = 0; i < measures.length; i++) {
-      if (i === 1) {
-        console.log(measures[i])
-      }
-      const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
-      const customFormat = formatType(value_format) || defaultFormatter
-      let agg
-      switch (type) {
-        case 'count': agg = tpl.sum(intFormat); break
-        case 'count_distinct': agg = tpl.sum(intFormat); break
-        case 'sum': agg = tpl.sum(customFormat); break
-        case 'sum_distinct': agg = tpl.sum(customFormat); break
-        case 'average': agg = tpl.average(customFormat); break
-        case 'median': agg = tpl.median(customFormat); break
-        case 'min': agg = tpl.min(customFormat); break
-        case 'max': agg = tpl.max(customFormat); break
-        case 'list': agg = tpl.listUnique(', '); break
-        case 'percent_of_total': agg = tpl.fractionOf(tpl.sum(), 'total', customFormat); break
-        case 'int': agg = tpl.sum(intFormat); break
-        case 'number': agg = tpl.sum(customFormat); break
-        default:
-          if (this && this.clearErrors && this.addError) {
-            this.clearErrors('measure-type')
-            this.addError({
-              group: 'measure-type',
-              title: `Cannot Show "${label1} ${label2}"`,
-              message: `Measure types of '${type}' are unsupported by this visualization.`
-            })
-          }
-          return
-      }
-      const aggName = `measure_${i}`
-      labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
-      aggregatorNames.push(aggName)
-      if (i === 1) {
-        aggregators.push(myAggregator)
-      } else {
-        aggregators.push(agg([name]))
+
+    if (!config.disable_all_aggregators) {
+      for (let i = 0; i < measures.length; i++) {
+        if (i === 1) {
+          console.log(measures[i])
+        }
+        const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
+        const customFormat = formatType(value_format) || defaultFormatter
+        let agg
+        switch (type) {
+          case 'count': agg = tpl.sum(intFormat); break
+          case 'count_distinct': agg = tpl.sum(intFormat); break
+          case 'sum': agg = tpl.sum(customFormat); break
+          case 'sum_distinct': agg = tpl.sum(customFormat); break
+          case 'average': agg = tpl.average(customFormat); break
+          case 'median': agg = tpl.median(customFormat); break
+          case 'min': agg = tpl.min(customFormat); break
+          case 'max': agg = tpl.max(customFormat); break
+          case 'list': agg = tpl.listUnique(', '); break
+          case 'percent_of_total': agg = tpl.fractionOf(tpl.sum(), 'total', customFormat); break
+          case 'int': agg = tpl.sum(intFormat); break
+          case 'number': agg = tpl.sum(customFormat); break
+          default:
+            if (this && this.clearErrors && this.addError) {
+              this.clearErrors('measure-type')
+              this.addError({
+                group: 'measure-type',
+                title: `Cannot Show "${label1} ${label2}"`,
+                message: `Measure types of '${type}' are unsupported by this visualization.`
+              })
+            }
+            return
+        }
+        const aggName = `measure_${i}`
+        labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
+        aggregatorNames.push(aggName)
+        if (i === 1) {
+          aggregators.push(myAggregator)
+        } else {
+          aggregators.push(agg([name]))
+        }
       }
     }
 

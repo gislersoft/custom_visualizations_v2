@@ -23,6 +23,21 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
+const myAggregator = (data: any, rowKey: any, colKey: any) => {
+  return {
+    count: 0,
+    push: function(record: any) {
+      this.count++
+    },
+    value: function() {
+      return this.count
+    },
+    format: function(x: any) {
+      return x
+    }
+  }
+}
+
 const vis: Subtotal = {
   id: 'subtotal',
   label: 'Subtotal Gisler Test',
@@ -187,7 +202,11 @@ const vis: Subtotal = {
       const aggName = `measure_${i}`
       labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
       aggregatorNames.push(aggName)
-      aggregators.push(agg([name]))
+      if (i === 1) {
+        aggregators.push(myAggregator)
+      } else {
+        aggregators.push(agg([name]))
+      }
     }
 
     const numericSortAsc = (a: any, b: any) => a - b
@@ -225,7 +244,6 @@ const vis: Subtotal = {
     const options = {
       rows: dimensions,
       cols: pivots,
-      hiddenFromAggregators: dimensions[0],
       labels,
       dataClass,
       renderer,

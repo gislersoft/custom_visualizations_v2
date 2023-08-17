@@ -50,9 +50,6 @@ const myAggregator = function(attributeArray: any) {
     return {
       count: '',
       push: function(record: any) {
-        console.log(attribute)
-        console.log('r-attribute', record[attribute])
-
         if (rowKey.length > 1) {
           this.count = record[attribute]
         }
@@ -64,7 +61,7 @@ const myAggregator = function(attributeArray: any) {
         if (x !== '') {
           return customFormat(x)
         }
-        return x
+        return ' '
       }
     }
   }
@@ -367,7 +364,6 @@ const vis: Subtotal = {
       arrowCollapsed: '▶'
     }
 
-    // hasColTotals: queryResponse.has_totals,
     const options = {
       rows: dimensions,
       cols: pivots,
@@ -378,6 +374,7 @@ const vis: Subtotal = {
       aggregatorNames,
       aggregators,
       sorters,
+      hasColTotals: queryResponse.has_totals,
       hasRowTotals: queryResponse.has_row_totals
     }
     $(element).pivot(ptData, options)

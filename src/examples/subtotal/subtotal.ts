@@ -61,7 +61,7 @@ const myAggregator = function(attributeArray: any) {
         if (x !== '') {
           return customFormat(x)
         }
-        return ' '
+        return LookerCharts.Utils.htmlForCell({ html: '<b>Hello</b>' } as Cell)
       }
     }
   }

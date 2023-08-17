@@ -80,7 +80,8 @@ const vis: Subtotal = {
   },
 
   update (data, element, config, queryResponse, details) {
-    if (!config || !data) return
+    console.log(data)
+    if (!config) return
     if (details && details.changed && details.changed.size) return
     if (!this.style) return
 
@@ -179,7 +180,6 @@ const vis: Subtotal = {
     const aggregators = []
 
     for (let i = 0; i < measures.length; i++) {
-      console.log('measures', measures)
       const { type, name, value_format, view_label: label1, label_short: label2 } = measures[i]
       const customFormat = formatType(value_format) || defaultFormatter
       let agg

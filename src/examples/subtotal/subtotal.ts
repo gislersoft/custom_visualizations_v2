@@ -23,26 +23,6 @@ interface Subtotal extends VisualizationDefinition {
   style?: HTMLElement
 }
 
-/*
-var countUnique = function(attributeArray) {
-  var attribute = attributeArray[0];
-  return function(data, rowKey, colKey) {
-    return {
-      uniq: [],
-      push: function(record) {
-        var _ref;
-        if (_ref = record[attribute], __indexOf.call(this.uniq, _ref) &lt; 0) {
-          this.uniq.push(record[attribute]);
-        }
-      },
-      value: function() { return this.uniq.length; },
-      format: function(x) { return x; },
-      numInputs: 1
-    };
-  };
-}
-*/
-
 const myAggregator = function(attributeArray: any) {
   const attribute = attributeArray[0]
   const customFormat = attributeArray[1]
@@ -61,36 +41,11 @@ const myAggregator = function(attributeArray: any) {
         if (x !== '') {
           return customFormat(x)
         }
-        return LookerCharts.Utils.htmlForCell({ html: '<b>Hello</b>' } as Cell)
+        return '-'
       }
     }
   }
 }
-
-/*
-const byPassAggregator = (data: any, rowKey: any, colKey: any, agg: any) => {
-  return {
-    count: '',
-    push: function(record: any) {
-      if (rowKey.length > 1) {
-        agg.push(record)
-      }
-    },
-    value: function() {
-      if (rowKey.length > 1) {
-        return this.count
-      }
-      return agg.value()
-    },
-    format: function(x: any) {
-      if (rowKey.length > 1) {
-        return agg.format(x)
-      }
-      return x
-    }
-  }
-}
-*/
 
 const vis: Subtotal = {
   id: 'subtotal',
@@ -168,76 +123,6 @@ const vis: Subtotal = {
     const htmlForCell = (cell: Cell) => {
       return cell.html ? LookerCharts.Utils.htmlForCell(cell) : cell.value
     }
-
-    /*
-    const checkAggregatorsConfig = function(measure:any, agg: any) {
-      if (config.disable_top_level_aggregators) {
-        console.log('Injecting aggregator 2', agg)
-        const newAgg = { ...agg }
-        newAgg.originalPush = { ...agg.push }
-        newAgg.originalFormat = { ...agg.format }
-        newAgg.originalValue = { ...agg.value }
-        newAgg.originalCount = { ...agg.count }
-
-        newAgg.push = function(record: any) {
-          console.log('rowKey', this['rowKey'])
-          if (this['rowKey'].length > 1) {
-            this.originalPush(record)
-          }
-        }
-
-        newAgg.format = function(x: any) {
-          console.log('rowKey', this['rowKey'])
-          if (this['rowKey'].length > 1) {
-            return 'Top Level'
-          }
-          return x
-        }
-
-        */
-
-        /*
-        type aggregatorParams = Parameters<typeof agg>;
-        agg.format = function(x: any) {
-          console.info(this['rowKey'])
-          if (this['rowKey'].length > 1) {
-            return originalFormat(x)
-          }
-          return x
-        }
-        */
-
-        /*
-        const newAggregator = (data: any, rowKey: any, colKey: any) => {
-          return {
-            count: '',
-            push: function(record: any) {
-              if (rowKey.length > 1) {
-                this.originalPushAgg(record)
-              }
-            },
-            value: function() {
-              if (rowKey.length > 1) {
-                return originalCount
-              }
-              return this.originalValue()
-            },
-            format: function(x: any) {
-              if (rowKey.length > 1) {
-                return this.originalFormat(x)
-              }
-              return x
-            }
-          }
-        }
-
-        return myAggregator
-
-      } else {
-        return agg
-      }
-    }
-    */
 
     const ptData = []
     for (const row of data) {

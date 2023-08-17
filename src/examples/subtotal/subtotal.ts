@@ -45,53 +45,23 @@ var countUnique = function(attributeArray) {
 
 const myAggregator = function(attributeArray: any) {
   const attribute = attributeArray[0]
+  const customFormat = attributeArray[1]
   return function(data: any, rowKey: any, colKey: any) {
     return {
       count: '',
       push: function(record: any) {
         console.log(attribute)
-        console.log('data', data)
-        console.log('rowKey', rowKey)
-        // console.log('colKey', colKey)
-        console.log('record', record)
         console.log('r-attribute', record[attribute])
 
-        // if (rowKey.length > 1) {
-        if (data && data.aggregatorName && data.labels) {
-          let measureField = ''
-          const measure = data.aggregatorName
-          const labelToSearch = data.labels[measure].label
-          console.log(labelToSearch)
-          const keys = Object.keys(data.labels)
-          console.log(keys)
-          for (let i = 0; i < keys.length; i++) {
-            console.log('i=' + i + ' ' + keys[i], data.labels[keys[i]])
-            if (data.labels[keys[i]]
-              && data.labels[keys[i]].label
-              && data.labels[keys[i]].label === labelToSearch) {
-              measureField = keys[i]
-              break
-            }
-          }
-          console.log('measureField', measureField)
-          if (measureField) {
-            this.count = record[measureField]
-          }
+        if (rowKey.length > 1) {
+          this.count = record[attribute]
         }
-
-        // }
       },
       value: function() {
         return this.count
       },
       format: function(x: any) {
-        if (x !== '') {
-          const intFormat = formatType('###,###,###,##0')
-          if (intFormat) {
-            return intFormat(x)
-          }
-        }
-        return x
+        return customFormat(x)
       }
     }
   }
@@ -356,7 +326,7 @@ const vis: Subtotal = {
       labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
       aggregatorNames.push(aggName)
       if (config.disable_top_level_aggregators) {
-        aggregators.push(myAggregator([name]))
+        aggregators.push(myAggregator([name, customFormat]))
       } else {
         aggregators.push(agg([name]))
       }

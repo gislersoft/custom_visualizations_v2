@@ -61,7 +61,10 @@ const myAggregator = function(attributeArray: any) {
         return this.count
       },
       format: function(x: any) {
-        return customFormat(x)
+        if (x !== '') {
+          return customFormat(x)
+        }
+        return x
       }
     }
   }

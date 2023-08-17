@@ -81,7 +81,7 @@ const vis: Subtotal = {
 
   update (data, element, config, queryResponse, details) {
     console.log(data)
-    if (!config) return
+    if (!config || !data || data.length === 0) return
     if (details && details.changed && details.changed.size) return
     if (!this.style) return
 
@@ -127,6 +127,7 @@ const vis: Subtotal = {
 
     const ptData = []
     for (const row of data) {
+      console.log(row)
       const ptRow: { [key: string]: any } = {}
       for (const key of Object.keys(row)) {
         const cell = row[key] as Cell

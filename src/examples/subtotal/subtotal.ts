@@ -36,7 +36,7 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
         if (data && data.aggregatorName && data.labels) {
           let measureField = ''
           const measure = data.aggregatorName
-          const labelToSearch = data.labels[measure]
+          const labelToSearch = data.labels[measure].label
           console.log(labelToSearch)
           const keys = Object.keys(data.labels)
           console.log(keys)

@@ -331,7 +331,7 @@ const vis: Subtotal = {
       labels[aggName] = config.show_full_field_name ? { label: label1, sublabel: label2 } : { label: label2 }
       aggregatorNames.push(aggName)
       if (config.disable_top_level_aggregators) {
-        aggregators.push(myAggregator)
+        aggregators.push({ ...myAggregator })
       } else {
         aggregators.push(agg([name]))
       }

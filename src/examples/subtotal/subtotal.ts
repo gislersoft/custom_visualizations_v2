@@ -32,30 +32,30 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
       // console.log('colKey', colKey)
       console.log('record', record)
 
-      if (rowKey.length > 1) {
-        if (data && data.aggregatorName && data.labels) {
-          let measureField = ''
-          const measure = data.aggregatorName
-          const labelToSearch = data.labels[measure].label
-          console.log(labelToSearch)
-          const keys = Object.keys(data.labels)
-          console.log(keys)
-          for (let i = 0; i < keys.length; i++) {
-            console.log('i=' + i + ' ' + keys[i], data.labels[keys[i]])
-            if (data.labels[keys[i]]
-              && data.labels[keys[i]].label
-              && data.labels[keys[i]].label === labelToSearch) {
-              measureField = keys[i]
-              break
-            }
-          }
-          console.log('measureField', measureField)
-          if (measureField) {
-            this.count = record[measureField]
+      // if (rowKey.length > 1) {
+      if (data && data.aggregatorName && data.labels) {
+        let measureField = ''
+        const measure = data.aggregatorName
+        const labelToSearch = data.labels[measure].label
+        console.log(labelToSearch)
+        const keys = Object.keys(data.labels)
+        console.log(keys)
+        for (let i = 0; i < keys.length; i++) {
+          console.log('i=' + i + ' ' + keys[i], data.labels[keys[i]])
+          if (data.labels[keys[i]]
+            && data.labels[keys[i]].label
+            && data.labels[keys[i]].label === labelToSearch) {
+            measureField = keys[i]
+            break
           }
         }
-
+        console.log('measureField', measureField)
+        if (measureField) {
+          this.count = record[measureField]
+        }
       }
+
+      // }
     },
     value: function() {
       return this.count

@@ -367,6 +367,7 @@ const vis: Subtotal = {
       arrowCollapsed: '▶'
     }
 
+    // hasColTotals: queryResponse.has_totals,
     const options = {
       rows: dimensions,
       cols: pivots,
@@ -377,7 +378,6 @@ const vis: Subtotal = {
       aggregatorNames,
       aggregators,
       sorters,
-      hasColTotals: queryResponse.has_totals,
       hasRowTotals: queryResponse.has_row_totals
     }
     $(element).pivot(ptData, options)

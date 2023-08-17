@@ -29,7 +29,7 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
     push: function(record: any) {
       console.log('data', data)
       console.log('rowKey', rowKey)
-      console.log('colKey', colKey)
+      // console.log('colKey', colKey)
       console.log('record', record)
 
       if (rowKey.length > 1) {
@@ -37,8 +37,11 @@ const myAggregator = (data: any, rowKey: any, colKey: any): any => {
           let measureField = ''
           const measure = data.aggregatorName
           const labelToSearch = data.labels[measure]
+          console.log(labelToSearch)
           const keys = Object.keys(data.labels)
+          console.log(keys)
           for (let i = 0; i < keys.length; i++) {
+            console.log('i=' + i + ' ' + keys[i], data.labels[keys[i]])
             if (data.labels[keys[i]]
               && data.labels[keys[i]].label
               && data.labels[keys[i]].label === labelToSearch) {

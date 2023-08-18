@@ -262,6 +262,8 @@ const vis: Subtotal = {
       hasColTotals: queryResponse.has_totals,
       hasRowTotals: queryResponse.has_row_totals
     }
+
+    $(element).empty()
     if (data.length > 0) {
       $(element).pivot(ptData, options)
     } else {

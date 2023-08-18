@@ -80,19 +80,6 @@ const vis: Subtotal = {
   },
 
   update (data, element, config, queryResponse, details) {
-
-    if (data && data.length === 0) {
-      if (this && this.clearErrors && this.addError) {
-        this.clearErrors('data-not-found-type')
-        this.addError({
-          group: 'data-not-found-type',
-          title: `No data"`,
-          message: `No results found.`
-        })
-      }
-      return
-    }
-
     if (!config || !data) return
     if (details && details.changed && details.changed.size) return
     if (!this.style) return
@@ -275,7 +262,11 @@ const vis: Subtotal = {
       hasColTotals: queryResponse.has_totals,
       hasRowTotals: queryResponse.has_row_totals
     }
-    $(element).pivot(ptData, options)
+    if (data.length > 0) {
+      $(element).pivot(ptData, options)
+    } else {
+      $(element).append('No results')
+    }
 
   }
 }

@@ -80,8 +80,20 @@ const vis: Subtotal = {
   },
 
   update (data, element, config, queryResponse, details) {
-    console.log(data)
-    if (!config || !data || data.length === 0) return
+
+    if (data && data.length === 0) {
+      if (this && this.clearErrors && this.addError) {
+        this.clearErrors('data-not-found-type')
+        this.addError({
+          group: 'data-not-found-type',
+          title: `No data"`,
+          message: `No results found.`
+        })
+      }
+      return
+    }
+
+    if (!config || !data) return
     if (details && details.changed && details.changed.size) return
     if (!this.style) return
 

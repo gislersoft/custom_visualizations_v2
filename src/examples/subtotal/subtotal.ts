@@ -267,7 +267,7 @@ const vis: Subtotal = {
     if (data.length > 0) {
       $(element).pivot(ptData, options)
     } else {
-      $(element).append('No results')
+      $(element).append('<div style=\'text-align: center\'>No results</div>')
     }
 
   }
